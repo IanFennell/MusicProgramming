@@ -1,4 +1,5 @@
 import core
+import midify_messages
 import os
 import shutil
 from mido import MidiFile
@@ -18,6 +19,7 @@ def main():
     # -Undo Stack, not REALLY required
     # -Fairly near done honestly
     options = Options()
+    messages = midify_messages.messages
     try:
         Original_prompt = "Please enter a command:\n"
         prompt = Original_prompt
@@ -29,13 +31,7 @@ def main():
                 prompt = f"{getattr(options, commands_in[0])(commands_in[1:])}\n{Original_prompt}"
 
             except AttributeError:
-                print('''Execution failed, please choose from the following options:
-remove {range|single} {instrument, name if range, int if single}
-load {song location}
-save {save location}
-play [optional location]
-reset
-exit''')
+                print(messages["execution_failed"])
     except KeyboardInterrupt:
         print("Cleaning up /temp directory")
         shutil.rmtree("temp")
@@ -106,3 +102,4 @@ if __name__ == "__main__":
         os.mkdir("temp")
     if not os.path.exists("./songs"):
         raise NoSongDirectoryException
+    main()

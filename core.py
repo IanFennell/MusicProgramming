@@ -1,4 +1,5 @@
 from mido import MidiFile, MidiTrack, Message
+import midify_messages
 import os
 import sys
 import subprocess
@@ -15,11 +16,13 @@ class NoInstrumentError(Exception):
 class InvalidIntError(Exception):
     pass
 
+errors = midify_messages.error_messages
 
 def remove_instrument_range(instrument, messages):
+    global errors
     global instrument_ranges
     if instrument not in instrument_ranges:
-        print("That is not a Supported instrument,\nPlease try with the following instruments:")
+        print(f"{errors['unsupp_inst']}{errors[unsupp_range]}")
         for instrument in instrument_ranges.keys():
             print(f"-{instrument}")
         raise NoInstrumentError
@@ -32,7 +35,7 @@ def remove_single_instrument(instrument_num, messages):
         print("Please enter a valid Number")
         raise InvalidIntError
     if instrument_num not in range(1,128):
-        print("That is not a Supported instrument,\nTry again with a number 0 < n ≤ 127")
+        print(f"{errors['unsupp_inst']}{errors['unsupp_single']}")
         raise NoInstrumentError
     return remove_instrument(instrument_num, messages, equal_single)
 
@@ -75,8 +78,9 @@ def save_messages(mido_file, messages, location="temp/output.mid"):
     mido_file.save(location)
 
 def play_song(location="temp/output.mid", quiet=True):
+    global errors
     if not os.path.exists(location):
-        raise NotASongLocationException
+        print(errors["failed_find"].format(location))
     else:
         run_args = ["fluidsynth", "-a", "alsa", "-m", "alsa_seq", "-l", "-i", "Soundfont.sf2", location]
         if quiet:

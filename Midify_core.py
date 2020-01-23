@@ -1,5 +1,5 @@
 from mido import MidiFile, MidiTrack, Message
-import midify_messages
+import Midify_messages
 import os
 import sys
 import subprocess
@@ -19,7 +19,7 @@ class InvalidIntError(Exception):
 class NoFluidSynthError(Exception):
     pass
 
-errors = midify_messages.error_messages
+errors = Midify_messages.error_messages
 
 def remove_instrument_range(instrument, messages):
     global errors

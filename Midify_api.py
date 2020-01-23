@@ -1,18 +1,22 @@
-import core
-import midify_messages
+import Midify_core
+import Midify_messages
 import os
 import shutil
 from mido import MidiFile
-from core import NoInstrumentError, NoSongDirectoryException, InvalidIntError, NotASongLocationException, NoFluidSynthError
+from Midify_core import NoInstrumentError, NoSongDirectoryException, InvalidIntError, NotASongLocationException, NoFluidSynthError
 
 
 def RemoveScopeError(Exception):
     pass
 
-instructions = {"single":core.remove_single_instrument,
-                "range":core.remove_instrument_range}
+instructions = {"single":Midify_core.remove_single_instrument,
+                "range":Midify_core.remove_instrument_range}
 
-
+def logo_on_start(messages):
+    rows, _ = os.popen('stty size','r').read().split()
+    spaces_left = int(int(rows)/2)
+    for message_row in messages["on_start"].split("\n"):
+        print(f"{' '*spaces_left}{message_row}")
 
 def main():
     # remember to:
@@ -29,7 +33,8 @@ def main():
     if not os.path.exists("./songs"):
         raise NoSongDirectoryException
     options = Options()
-    messages = midify_messages.messages
+    messages = Midify_messages.messages
+    logo_on_start(messages)
     try:
         Original_prompt = messages["prompt"]
         prompt = Original_prompt
@@ -40,6 +45,8 @@ def main():
                 prompt = f"{getattr(options, commands_in[0])(commands_in[1:])}\n\n{Original_prompt}"
             except AttributeError:
                 print(messages["execution_failed"])
+            except IndexError:
+                pass
     except KeyboardInterrupt:
         print(messages["clean_temp"])
         shutil.rmtree("temp")
@@ -48,8 +55,8 @@ def main():
 
 class Options:
     def __init__(self):
-        self.midify_messages = midify_messages.messages
-        self.form_messages = midify_messages.format_messages
+        self.midify_messages = Midify_messages.messages
+        self.form_messages = Midify_messages.format_messages
         self.midi_file = MidiFile()
         self.messages = []
         self.original_messages = []
@@ -93,23 +100,23 @@ class Options:
         if len(self.messages) == 0:
             return self.midify_messages["empty"]
         location = args[0]
-        core.save_messages(self.midi_file, self.messages, location)
+        Midify_core.save_messages(self.midi_file, self.messages, location)
         return self.midify_messages["save"]
 
     def play(self, args):
         if len(args) == 0:
             if len(self.messages) == 0:
                 return self.midify_messages["empty"]
-            core.save_messages(self.midi_file, self.messages)
+            Midify_core.save_messages(self.midi_file, self.messages)
             print(self.midify_messages["ensure_root"])
-            core.play_song()
+            Midify_core.play_song()
             os.remove("temp/output.mid")
         else:
             song_location = args[0]
             if song_location[-4:] != ".mid":
                 song_location+=".mid"
             try:
-                core.play_song(self.form_messages["songs"].format(song_location))
+                Midify_core.play_song(self.form_messages["songs"].format(song_location))
             except NoFluidSynthError:
                 return ""
         return self.midify_messages["comp_play"]
@@ -132,14 +139,14 @@ class Options:
         if len(args) == 0:
             return self.midify_messages["empty_help"]
         command_in = args[0]
-        help_messages = midify_messages.help_messages
+        help_messages = Midify_messages.help_messages
         if command_in not in help_messages.keys():
             command_in = "error"
         return help_messages[command_in]
 
     def reset(self, args):
         self.messages = self.original_messages
-        return messages["reset"]
+        return self.midify_messages["reset"]
 
     def exit(self, args):
         raise KeyboardInterrupt

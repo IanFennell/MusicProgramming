@@ -26,6 +26,15 @@ play [optional location]
 list
 reset
 exit\n''',
+"on_start":'''
+ ___ ___  ____  ___    ____  _____  __ __ 
+|   |   ||    ||    \ |    ||     ||  |  |
+| _   _ | |  | |     \ |  | |   __||  |  |
+|  \_/  | |  | |  |  | |  | |  |_  |  |  |
+|   |   | |  | |  |  | |  | |   _] |___  |
+|   |   | |  | |     | |  | |  |   |     |
+|___|___||____||_____||____||__|   |____/ 
+                                          '''
 }
 
 format_messages={"invalid_scope":"{} is not a valid option, Valid options are:\n-single\n-range",

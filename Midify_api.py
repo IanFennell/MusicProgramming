@@ -19,14 +19,6 @@ def logo_on_start(messages):
         print(f"{' '*spaces_left}{message_row}")
 
 def main():
-    # remember to:
-    # -clean up code
-    # -Set wait to play? Simple os.sleep
-    # -Only support for single tracks
-    # -Undo Stack, not REALLY required
-    # -Add guards to FluidSynth in case it isn't installed
-    # -Add user input guards? eg locations
-    # -Fairly near done honestly
     if not os.path.exists("./temp"):
         print("Creating /temp directory")
         os.mkdir("temp")

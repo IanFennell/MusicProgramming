@@ -30,7 +30,7 @@ def remove_instrument_range(instrument, messages):
 
 def remove_single_instrument(instrument_num, messages):
     try:
-        int(instrument_num)
+        instrument_num = int(instrument_num)
     except ValueError:
         print("Please enter a valid Number")
         raise InvalidIntError
@@ -87,7 +87,10 @@ def play_song(location="temp/output.mid", quiet=True):
             output = open(os.devnull, "w")
         else:
             output = sys.stdout
-        subprocess.call(run_args, stdout=output, stderr=output)
+        try:
+            subprocess.call(run_args, stdout=output, stderr=output)
+        except FileNotFoundError:
+            print(errors["failed_fluidsynth"])
         
 instrument_ranges = {"piano": range(1,9),
                      "Chromatic Percussion":range(9,17),

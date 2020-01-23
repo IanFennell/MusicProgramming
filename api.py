@@ -3,7 +3,7 @@ import midify_messages
 import os
 import shutil
 from mido import MidiFile
-from core import NoInstrumentError, NoSongDirectoryException, InvalidIntError, NotASongLocationException
+from core import NoInstrumentError, NoSongDirectoryException, InvalidIntError, NotASongLocationException, NoFluidSynthError
 
 
 def RemoveScopeError(Exception):
@@ -108,8 +108,11 @@ class Options:
             song_location = args[0]
             if song_location[-4:] != ".mid":
                 song_location+=".mid"
-            core.play_song(self.form_messages["songs"].format(song_location))
-        return messages["comp_play"]
+            try:
+                core.play_song(self.form_messages["songs"].format(song_location))
+            except NoFluidSynthError:
+                return ""
+        return self.midify_messages["comp_play"]
     
     def list(self, args):
         songs_list = os.listdir("./songs")

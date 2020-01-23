@@ -16,6 +16,9 @@ class NoInstrumentError(Exception):
 class InvalidIntError(Exception):
     pass
 
+class NoFluidSynthError(Exception):
+    pass
+
 errors = midify_messages.error_messages
 
 def remove_instrument_range(instrument, messages):
@@ -91,6 +94,7 @@ def play_song(location="temp/output.mid", quiet=True):
             subprocess.call(run_args, stdout=output, stderr=output)
         except FileNotFoundError:
             print(errors["failed_fluidsynth"])
+            raise NoFluidSynthError
         
 instrument_ranges = {"piano": range(1,9),
                      "Chromatic Percussion":range(9,17),

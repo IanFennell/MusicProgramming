@@ -25,7 +25,7 @@ def remove_instrument_range(instrument, messages):
     global errors
     global instrument_ranges
     if instrument not in instrument_ranges:
-        print(f"{errors['unsupp_inst']}{errors[unsupp_range]}")
+        print(f"{errors['unsupp_inst']}{errors['unsupp_range']}")
         for instrument in instrument_ranges.keys():
             print(f"-{instrument}")
         raise NoInstrumentError
@@ -97,20 +97,20 @@ def play_song(location="temp/output.mid", quiet=True):
             raise NoFluidSynthError
         
 instrument_ranges = {"piano": range(1,9),
-                     "Chromatic Percussion":range(9,17),
-                     "Organ": range(17,25),
+                     "chromatic percussion":range(9,17),
+                     "organ": range(17,25),
                      "guitar":range(25,33),
-                     "Bass": range(30,41),
-                     "Orchestra Solo": range(41,49),
-                     "Orchestra Ensemble": range(49,57),
-                     "Brass": range(57,65),
-                     "Reed": range(65,73),
-                     "Wind": range(73,81),
-                     "Synth Lead": range(81,89),
-                     "Synth Pad": range(89,97),
-                     "Synth Sound FX": range(97,105),
-                     "Ethnic": range(105,113),
-                     "Percusssive": range(113,121),
-                     "Misc SFX": range(121,129),
+                     "bass": range(30,41),
+                     "orchestra solo": range(41,49),
+                     "orchestra ensemble": range(49,57),
+                     "brass": range(57,65),
+                     "reed": range(65,73),
+                     "wind": range(73,81),
+                     "synth lead": range(81,89),
+                     "synth pad": range(89,97),
+                     "synth sound fx": range(97,105),
+                     "ethnic": range(105,113),
+                     "percusssive": range(113,121),
+                     "misc sfx": range(121,129),
                      }
 
